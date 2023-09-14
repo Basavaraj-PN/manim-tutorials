@@ -93,7 +93,7 @@ class Lerp(Scene):
 
         # Labels.
         health_txt = Text("Health Bar", font_size=40).set_color(GREEN)
-        label_txt = Text("Health bar with LERP").set_color(BLACK)
+        label_txt = Text("Health bar with example with LERP").set_color(BLACK)
         zero = TexText(r"0\%").set_color(PURE_RED)
         hundred = TexText(r"100\%").set_color(PURE_GREEN)
         t_label_txt = Text("t = 1.0")
@@ -127,8 +127,8 @@ class Lerp(Scene):
         # Lerp updater
         def lerp_updater(obj):
             t_ = t.get_value()
-            v = lerp(4, 0, t_)
-            c1 = lerp_color(blue, red, t_)
+            v = lerp(0, 4, (1 - t_))  # (1 - t_) => for to start with full health.
+            c1 = lerp_color(red, blue, (1 - t_))
             color.set_rgb(c1)
             health_txt.set_color(color)
             label_txt.set_color(color)
