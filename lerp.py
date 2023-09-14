@@ -42,23 +42,30 @@ class Lerp(Scene):
         label_txt = Text("Health bar with LERP").set_color(BLACK)
         zero = TexText(r"0\%").set_color(PURE_RED)
         hundred = TexText(r"100\%").set_color(PURE_GREEN)
+        t_label_txt = Text("t = 1.0")
 
         box = Rectangle(color=WHITE)
         health_txt.move_to(box)
+
         zero.next_to(box, LEFT)
         hundred.next_to(box, RIGHT)
+        t_label_txt.next_to(box, BOTTOM)
         moving_box = Rectangle(
             width=0.000,
             height=0.0,
         )
-        self.play(Write(label_txt))
+        self.play(FadeIn(label_txt))
         self.play(
             label_txt.animate.move_to(2.5 * UP).set_color(PURE_GREEN),
             rate_func=smooth,
             run_time=3
         )
         self.play(FadeIn(box), FadeIn(health_txt), FadeIn(moving_box))
-        self.play(Write(zero), Write(hundred))
+        self.play(Write(zero), Write(hundred), FadeIn(t_label_txt))
+
+        def t_label_updater(obj):
+            t_ = t.get_value()
+            obj.become(Text(f"t = {round((1 -t_), 2)}").next_to(box, BOTTOM))
 
         def lerp_updater(obj):
             t_ = t.get_value()
@@ -70,12 +77,9 @@ class Lerp(Scene):
             obj.become(
                 Rectangle(width=v, height=box.get_height(), fill_color=color, fill_opacity=1).align_to(box, LEFT),
             )
-
+        t_label_txt.add_updater(t_label_updater)
         moving_box.add_updater(lerp_updater)
-        # self.play(Write(box), Write(moving_box))
         self.wait()
-        # self.add(box, health_txt, moving_box)
-
         self.play(
             t.animate.set_value(1),
             run_time=20,
