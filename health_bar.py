@@ -67,18 +67,7 @@ def lerp(start: float, end: float, t: float) -> float:
     return start + (end - start) * t
 
 
-def inv_lerp(start:float, end: float, value: float) -> float:
-    """
-    Performs inverse linear interpolation to calculate the fraction t.
-    :param start: Start value.
-    :param end: End value.
-    :param value: Float from lerp function
-    :return: Float (value - start) / (end - start)
-    """
-    return (value - start) / (end - start)
-
-
-class HealBar(Scene):
+class HealthBar(Scene):
     def construct(self) -> None:
 
         # Empty color object for color operation.
