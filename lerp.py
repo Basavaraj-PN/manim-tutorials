@@ -78,7 +78,7 @@ def inv_lerp(start:float, end: float, value: float) -> float:
     return (value - start) / (end - start)
 
 
-class Lerp(Scene):
+class HealBar(Scene):
     def construct(self) -> None:
 
         # Empty color object for color operation.
@@ -93,7 +93,7 @@ class Lerp(Scene):
 
         # Labels.
         health_txt = Text("Health Bar", font_size=40).set_color(GREEN)
-        label_txt = Text("Health bar with example with LERP").set_color(BLACK)
+        label_txt = Text("Health bar example with LERP").set_color(BLACK)
         zero = TexText(r"0\%").set_color(PURE_RED)
         hundred = TexText(r"100\%").set_color(PURE_GREEN)
         t_label_txt = Text("t = 1.0")
