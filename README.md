@@ -2,4 +2,4 @@
 
 
 ## Lerp
-value =  start + (end - start) * fraction
+```value =  start + (end - start) * fraction```
