@@ -73,56 +73,34 @@ class Bezier(Scene):
                 moving_dots[n + j].set_color(color_array[i])
             n = n + lerps
 
-        # for i in range(len(lines)):
-        #     lerps = lerps_at_step(len(lines), i)
-        #     cnt =0
-        #     for j in range(len(fixed_dots), len(fixed_plus_moving_dots)):
-        #         # print(j)
-        #         # if(cnt < lerps):
-        #         print(f'pairs={j, j-len(fixed_dots), j-len(fixed_dots)+1}')
-        #         cnt =  cnt + 1
-        #     print("***")
-
-        # self.play(Write(Text("Done").next_to(ORIGIN)))
-        # d = d + 1
-
-        # 5 = 0,1
-        # 6 = 1,2
-        # 7 = 2,3
-        # 8 = 3,4
-
-        # 9 = 5,6
-        # 10 = 6, 7
-        # 11 = 7, 8
-
-        # 12 = 9, 10
-        # 13 = 10, 11
-
-        # 14 = 12, 13
 
         # loop start = 5 loop_end=14
         fixed_dots_ = fixed_plus_moving_dots[:5]
         moving_dots_ = fixed_plus_moving_dots[5:]
-        print(f'len(fixed_dots_) = {len(fixed_dots_)}')
+
 
         start = 0
+        k = 0
         for i in range(len(lines)):
             lerps = lerps_at_step(len(lines), i)
-            for j in range(start, len(fixed_plus_moving_dots) - 1):
-                if j < start + lerps:
-                    print(f'j={j},  start={start},  lerps={lerps},  [j-start] = {[j - start]},  [j+1-start] = {[j +1 - start]},  start+lerps={start+lerps}')
+            # print(lerps)
+            for j in range(lerps):
+                if i == 0:
+                    print(k, j, j + 1)
                     moving_dots_[j].add_updater(
-                        lambda obj, k=j: self.updater_wrapper(obj, fixed_plus_moving_dots[k - start].get_center(),
-                                                              fixed_plus_moving_dots[k + 1 - start].get_center()))
+                        lambda obj, j=j: self.updater_wrapper(obj, fixed_dots_[j].get_center(),
+                                                              fixed_dots_[j + 1].get_center()))
+                # print(k - lerps - j - 1, k - lerps - j)
+                else:
+                    print(k, k - lerps - j - 1 + j, k - lerps)
+                    moving_dots_[k].add_updater(
+                        lambda obj, k=k, j=j, lerps=lerps: self.updater_wrapper(obj, moving_dots_[
+                            k - lerps - j - 1 + j].get_center(),
+                            moving_dots_[k - lerps].get_center()))
+                k = k + 1
 
-            start = start + lerps
 
-        # for i in range(len(fixed_plus_moving_dots)):
-        #     if i < len(fixed_dots_)-1:
-        #         moving_dots_[i].add_updater(
-        #             lambda obj, i=i: self.updater_wrapper(obj, fixed_dots_[i].get_center(),
-        #                                                    fixed_dots_[i+1].get_center()))
-
+        #  0 - 0 + i
         # moving_dots_[0].add_updater(
         #     lambda obj: self.updater_wrapper(obj, fixed_dots_[0].get_center(),
         #                                      fixed_dots_[1].get_center()))
@@ -136,7 +114,8 @@ class Bezier(Scene):
         #     lambda obj: self.updater_wrapper(obj, fixed_dots_[3].get_center(),
         #                                      fixed_dots_[4].get_center()))
         #
-        # #
+        #
+        # 3 - 3 + i    (i - leprs - j )
         # moving_dots_[4].add_updater(
         #     lambda obj: self.updater_wrapper(obj, moving_dots_[0].get_center(),
         #                                      moving_dots_[1].get_center()))
@@ -146,13 +125,14 @@ class Bezier(Scene):
         # moving_dots_[6].add_updater(
         #     lambda obj: self.updater_wrapper(obj, moving_dots_[2].get_center(),
         #                                      moving_dots_[3].get_center()))
-        #
+        # 6 - 2 + i
         # moving_dots_[7].add_updater(
         #     lambda obj: self.updater_wrapper(obj, moving_dots_[4].get_center(),
         #                                      moving_dots_[5].get_center()))
         # moving_dots_[8].add_updater(
         #     lambda obj: self.updater_wrapper(obj, moving_dots_[5].get_center(),
         #                                      moving_dots_[6].get_center()))
+        # 8 - 1 + i
         # moving_dots_[9].add_updater(
         #     lambda obj: self.updater_wrapper(obj, moving_dots_[7].get_center(),
         #                                      moving_dots_[8].get_center()))
