@@ -78,8 +78,6 @@ class Bezier(Scene):
         fixed_dots_ = fixed_plus_moving_dots[:5]
         moving_dots_ = fixed_plus_moving_dots[5:]
 
-
-        start = 0
         k = 0
         for i in range(len(lines)):
             lerps = lerps_at_step(len(lines), i)
@@ -95,7 +93,7 @@ class Bezier(Scene):
                     print(k, k - lerps - j - 1 + j, k - lerps)
                     moving_dots_[k].add_updater(
                         lambda obj, k=k, j=j, lerps=lerps: self.updater_wrapper(obj, moving_dots_[
-                            k - lerps - j - 1 + j].get_center(),
+                            k - lerps - 1].get_center(),
                             moving_dots_[k - lerps].get_center()))
                 k = k + 1
 
@@ -138,7 +136,7 @@ class Bezier(Scene):
         #                                      moving_dots_[8].get_center()))
 
         # Draw path
-        dark_path1 = TracedPath(fixed_plus_moving_dots[-1].get_center).set_stroke(color=GREEN, width=13)
+        dark_path1 = TracedPath(fixed_plus_moving_dots[-1].get_center).set_stroke(color=RED, width=13)
         self.add(dark_path1)
 
         self.play(self.t.animate.set_value(1), rate_func=there_and_back, run_time=5)
