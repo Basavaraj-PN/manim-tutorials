@@ -46,25 +46,40 @@ class Bezier(Scene):
         self.camera.frame.move_to(6 * RIGHT + 2 * DOWN)
         self.camera.frame.set_z(8)
 
+        welocome_text = Text("Beauty of Bézier curve", gradient=(PURE_RED, PURE_GREEN, PURE_BLUE, MAROON_A))
+        welocome_text.move_to(self.camera.get_frame_center())
         lines = make_lines()
         fixed_dots_ = [Dot(radius=0.175, point=points[_]).set_color(ORANGE) for _ in range(len(points))]
         points_label_txt = [Text(labels[i]) for i in range(len(labels))]
         num_of_moving_dots = sum(len(lines) - i for i in range(len(lines)))
-        moving_dots = [Dot(radius=0.15) for i in range(num_of_moving_dots)]
+        # LEFT*12 Move dot to some random place.
+        moving_dots = [Dot(radius=0.15).move_to(LEFT*12) for i in range(num_of_moving_dots)]
         dots = fixed_dots_ + moving_dots
         fixed_plus_moving_dots = []
         for dot in dots:
             fixed_plus_moving_dots.append(dot)
 
         self.play(
+            FadeIn(welocome_text),
+            run_time=3
+        )
+        self.play(
+            FadeOut(welocome_text),
+            run_time=1
+        )
+        self.play(
             *[Write(fixed_plus_moving_dots[i]) for i in range(len(fixed_plus_moving_dots))]
+        )
+
+        self.play(
+            *[Write(points_label_txt[i].next_to(fixed_dots_[i],LEFT)) for i in range(len(fixed_dots_))]
         )
 
         self.play(
             *[Write(lines[i].set_stroke(WHITE, 8)) for i in range(len(lines))]
         )
 
-        # # TODO: Comments
+        # Color steps: Add different color to dots based on the iteration
         n = 0
         for i in range(len(lines)):
             lerps = lerps_at_step(len(lines), i)
@@ -136,8 +151,14 @@ class Bezier(Scene):
         #                                      moving_dots_[8].get_center()))
 
         # Draw path
-        dark_path1 = TracedPath(fixed_plus_moving_dots[-1].get_center).set_stroke(color=RED, width=13)
+
+        # draw_all_path = TracedPath(*[dot.get_center for dot in fixed_plus_moving_dots])
+        for i in range(len(fixed_plus_moving_dots) - 1):
+            self.add(TracedPath(fixed_plus_moving_dots[i].get_center).set_stroke(color=fixed_plus_moving_dots[i].get_color(), width=8))
+
+
+        dark_path1 = TracedPath(fixed_plus_moving_dots[-1].get_center).set_stroke(color=BLACK, width=13)
         self.add(dark_path1)
 
-        self.play(self.t.animate.set_value(1), rate_func=there_and_back, run_time=5)
+        self.play(self.t.animate.set_value(1), rate_func=there_and_back, run_time=10)
         # self.wait()
